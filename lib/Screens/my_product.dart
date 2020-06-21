@@ -1,9 +1,9 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fthvendor/models/ProductCategoryClass.dart';
 import 'package:fthvendor/models/productCard.dart';
 import 'package:fthvendor/models/task.dart';
 import 'package:intl/intl.dart';
@@ -12,89 +12,118 @@ import 'package:http/http.dart' as http;
 class myProduct extends StatefulWidget {
   @override
   static String id = "myProduct";
-  static String productUrl="";
-  static String productName="";
-  static String productCategory="";
-  static int productId=1;
-  static  var Producturl = "";
-  static bool loaded=false;
-  static String getCounturl;
-  static String productCategoryId;
-  static String productCategoryName;
-  String Categoryurl="";
-  String getCategoryCounturl="";
-  int ProductCategoryCount;
+  static String productUrl = "";
+  static String productName = "";
+  static String productCategory = "";
+  static int productId = 1;
+  static var Producturl = "";
+  static bool loaded = false;
+  static String getProductCounturl;
+  String getCategoryCountUrl;
+  var getCategoryCountResponse;
+  var getCategoryCountJson;
+  int getCategoryCountint;
+  String getCategoryUrl;
+  var getCategoryResponse;
+  var getCategoryJson;
+  int CategoryId;
+  String CategoryName;
 
   @override
   _myProductState createState() => _myProductState();
 
-
 // Lists
 
+  HashMap ProductCategoryMap = new HashMap<int, String>();
 
-  List<ProductCategoryClass>ProductCategoryList =[];
-
-
-
- // Related to PHP
+  // Related to PHP
 
 // Getting Product Info
-  void getInfo() async{
+  void getInfo() async {
+    getCategoryCountUrl =
+        "https://dev.farmtohome.online/flutter_test/getCategoryCount.php";
+    getCategoryCountResponse = await http.post(getCategoryCountUrl);
+    getCategoryCountJson = jsonDecode(getCategoryCountResponse.body);
+    getCategoryCountint = int.parse(getCategoryCountJson[0]['COUNT(*)']);
+
+    getCategoryUrl =
+        "https://dev.farmtohome.online/flutter_test/getProductCategory.php";
+    getCategoryResponse = await http.post(getCategoryUrl);
+    getCategoryJson = jsonDecode(getCategoryResponse.body);
+
+    for (int i = 0; i < getCategoryCountint; i++) {
+      CategoryId = int.parse(getCategoryJson[i]['cat_id']);
+      CategoryName = getCategoryJson[i]['cat_name'];
+      ProductCategoryMap[CategoryId] = CategoryName;
+    }
+    print(ProductCategoryMap[CategoryId]);
     Producturl = 'https://dev.farmtohome.online/flutter_test/view_products.php';
-    getCounturl="https://dev.farmtohome.online/flutter_test/getProductCount.php";
-    var countResponse= await http.post(getCounturl);
+    getProductCounturl =
+        "https://dev.farmtohome.online/flutter_test/getProductCount.php";
+    var countResponse = await http.post(getProductCounturl);
     var getCount = jsonDecode(countResponse.body);
-    var response1= await http.post(Producturl);
+    var response1 = await http.post(Producturl);
     var message1 = jsonDecode(response1.body);
 
-    for(int i=0;i<int.parse(getCount['COUNT(*)']);i++) {
+    for (int i = 0; i < int.parse(getCount['COUNT(*)']); i++) {
       myProduct.productId = int.parse(message1[i]['prod_id']);
       myProduct.productCategory = message1[i]['cat_id'];
       myProduct.productUrl = message1[i]['prod_img'];
       myProduct.productName = message1[i]['prod_name'];
-      print("index: $i prod_id: ${int.parse(message1[i]['prod_id'])}");
+      int category = int.parse(myProduct.productCategory);
+      var category1 = ProductCategoryMap[category];
+      if (category1 == null) {
+        category1 = "Category Unknown";
+      }
       ProductCard.add(
-        Task(
-            myProduct.productUrl,
-            myProduct.productName,
-            myProduct.productCategory,
+        Task(myProduct.productUrl, myProduct.productName, category1,
             myProduct.productId),
       );
     }
   }
-  void getProductCategory() async{
 
-//    getCategoryCounturl="https://dev.farmtohome.online/flutter_test/getCategoryCount.php";
-//    var getCategoryCount =  await http.post(getCounturl);
-//    ProductCategoryCount=jsonD(getCategoryCount['COUNT(*)']));
-//    Categoryurl = 'https://dev.farmtohome.online/flutter_test/getProductCategory.php';
-//    var getCategory = await http.post(getCategoryCounturl);
-//    for(int i=0;i<ProductCategoryCount;i++){
-//      productCategoryId=getCategory['cat_id'];
-//      productCategoryName=getCategory['cat_name'];
-//      ProductCategoryList.add(
-//        ProductCategoryClass(productCategoryName, productCategoryId),
-//      );
+//  void getProductCategory() async {
+//    getCategoryCountUrl = "https://dev.farmtohome.online/flutter_test/getCategoryCount.php";
+//    getCategoryCountResponse = await http.post(getCategoryCountUrl);
+//    getCategoryCountJson = jsonDecode(getCategoryCountResponse.body);
+//    getCategoryCountint = int.parse(getCategoryCountJson[0]['COUNT(*)']);
+//
+//    getCategoryUrl = "https://dev.farmtohome.online/flutter_test/getProductCategory.php";
+//    getCategoryResponse = await http.post(getCategoryUrl);
+//    getCategoryJson = jsonDecode(getCategoryResponse.body);
+//
+//    for (int i = 0; i < getCategoryCountint; i++) {
+//      CategoryId = int.parse(getCategoryJson[i]['cat_id']);
+//      CategoryName = getCategoryJson[i]['cat_name'];
+//      ProductCategoryMap[CategoryId]=CategoryName;
+//
+//
 //    }
-
-  }
-
-
+//    myProduct().getInfo();
+//  }
 
 }
 
+List<Task> ProductCard = [];
 
-
-List<Task>ProductCard = [];
 class _myProductState extends State<myProduct> {
-
-
-
-
-
   static var now = new DateTime.now();
   static var formatter = new DateFormat('yyyy-MM-dd');
   String formattedDate = formatter.format(now);
+
+  String getNameForCategory(String catId) {
+//ProductCategoryClass productCategoryClass;
+
+//  myProduct().ProductCategoryMap.forEach((element) {
+//    productCategoryClass=element;
+//    print(productCategoryClass.categoryName);
+//    if(productCategoryClass.categoryId==myProduct.productId){
+//      return productCategoryClass.categoryName;
+//    }
+//    else return "hello";
+//
+//});
+  }
 
   Widget build(BuildContext context) {
     double defaultScreenWidth = 414.0;
@@ -146,13 +175,19 @@ class _myProductState extends State<myProduct> {
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
-                    return index<ProductCard.length? productCard(
-                        ProductCard[index].productUrl,
-                        ProductCard[index].productName,
-                        ProductCard[index].categoryName,
-                        ProductCard[index].productId):productCard("https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg","End OF List","",null);
+                    return index < ProductCard.length
+                        ? productCard(
+                            ProductCard[index].productUrl,
+                            ProductCard[index].productName,
+                            ProductCard[index].categoryName,
+                            ProductCard[index].productId)
+                        : productCard(
+                            "https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg",
+                            "End OF List",
+                            "",
+                            null);
                   },
-                  itemCount: ProductCard.length+7,
+                  itemCount: ProductCard.length + 7,
                 ),
               ),
             ),
@@ -161,7 +196,6 @@ class _myProductState extends State<myProduct> {
       ),
     );
   }
-
 }
 
 //ListView(children: [

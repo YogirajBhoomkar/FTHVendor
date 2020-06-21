@@ -22,7 +22,9 @@ class _mainScreenState extends State<mainScreen> {
    super.initState();
    if(loaded==false) {
      myProduct().getInfo();
-    // myProduct().getProductCategory(); // calling product list here as it was not loading when loaded in my product in the first time
+//     myProduct().getProductCategory();
+
+     // calling product list here as it was not loading when loaded in my product in the first time
      setState(() {
        loaded = true;
      });
@@ -286,20 +288,23 @@ class cardRow extends StatelessWidget {
   cardRow(this.color1,this.Title1,this.Number1);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 100.h,
-      child: Card(
-        child: Row(
-          children: [
-            Container(width: 100.w,height:100.h,color: Color.fromARGB(10, 0, 0, 0),child: Icon(Icons.playlist_add_check,color: Colors.white,size: ScreenUtil().setWidth(40),),),
-            SizedBox(width: 10.w,),
-            Container( width:200.w,child: Text(Title1,style: TextStyle(fontSize: ScreenUtil().setSp(20),color: Colors.white),),),
-            SizedBox(width: 20.w,),
-            Container(width:60,child: Text(Number1.toString(),style:TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.white),)),
-            SizedBox(width: 10.w,),
-          ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
+      child: Container(
+        height: 100.h,
+        child: Card(
+          child: Row(
+            children: [
+              Container(width: 60.w,height:100.h,color: Color.fromARGB(10, 0, 0, 0),child: Icon(Icons.playlist_add_check,color: Colors.white,size: ScreenUtil().setWidth(40),),),
+              SizedBox(width: 25.w,),
+              Container( width:200.w,child: Text(Title1,style: TextStyle(fontSize: ScreenUtil().setSp(20),color: Colors.white),),),
+              SizedBox(width: 20.w,),
+              Container(width:60,child: Text(Number1.toString(),style:TextStyle(fontSize: ScreenUtil().setSp(30),color: Colors.white),)),
+              SizedBox(width: 10.w,),
+            ],
+          ),
+          color: color1,
         ),
-        color: color1,
       ),
     );
   }
