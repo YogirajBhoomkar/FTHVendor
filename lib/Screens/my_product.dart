@@ -82,25 +82,6 @@ class myProduct extends StatefulWidget {
     }
   }
 
-//  void getProductCategory() async {
-//    getCategoryCountUrl = "https://dev.farmtohome.online/flutter_test/getCategoryCount.php";
-//    getCategoryCountResponse = await http.post(getCategoryCountUrl);
-//    getCategoryCountJson = jsonDecode(getCategoryCountResponse.body);
-//    getCategoryCountint = int.parse(getCategoryCountJson[0]['COUNT(*)']);
-//
-//    getCategoryUrl = "https://dev.farmtohome.online/flutter_test/getProductCategory.php";
-//    getCategoryResponse = await http.post(getCategoryUrl);
-//    getCategoryJson = jsonDecode(getCategoryResponse.body);
-//
-//    for (int i = 0; i < getCategoryCountint; i++) {
-//      CategoryId = int.parse(getCategoryJson[i]['cat_id']);
-//      CategoryName = getCategoryJson[i]['cat_name'];
-//      ProductCategoryMap[CategoryId]=CategoryName;
-//
-//
-//    }
-//    myProduct().getInfo();
-//  }
 
 }
 
@@ -112,17 +93,6 @@ class _myProductState extends State<myProduct> {
   String formattedDate = formatter.format(now);
 
   String getNameForCategory(String catId) {
-//ProductCategoryClass productCategoryClass;
-
-//  myProduct().ProductCategoryMap.forEach((element) {
-//    productCategoryClass=element;
-//    print(productCategoryClass.categoryName);
-//    if(productCategoryClass.categoryId==myProduct.productId){
-//      return productCategoryClass.categoryName;
-//    }
-//    else return "hello";
-//
-//});
   }
 
   Widget build(BuildContext context) {
@@ -198,8 +168,3 @@ class _myProductState extends State<myProduct> {
   }
 }
 
-//ListView(children: [
-//                productCard(ProductCard[0].productUrl,ProductCard[0].productName,ProductCard[0].categoryName,ProductCard[0].productId),
-//                productCard(ProductCard[1].productUrl,ProductCard[1].productName,ProductCard[1].categoryName,ProductCard[1].productId),
-//                productCard(ProductCard[2].productUrl,ProductCard[2].productName,ProductCard[1].categoryName,ProductCard[2].productId),
-//              ],),
