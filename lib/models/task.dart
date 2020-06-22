@@ -5,13 +5,17 @@ class Task{
    String productName="Product Name";
    String categoryName="Category Name";
    int productId;
+   bool selectedFlag=false;
+   int index;
 
-  Task(productUrl,productName,categoryName,productId){
+  Task(index,productUrl,productName,categoryName,productId,selectedFLag){
+    this.index=index;
     this.productUrl=productUrl;
     this.productName=productName;
     this.categoryName=categoryName;
     this.productId=productId;
-    productCard(this.productUrl,this.productName,this.categoryName,this.productId);
+    this.selectedFlag=selectedFlag;
+    productCard(this.index,this.productUrl,this.productName,this.categoryName,this.productId,this.selectedFlag);
 
   }
 }

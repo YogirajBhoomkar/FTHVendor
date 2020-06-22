@@ -22,8 +22,6 @@ class _mainScreenState extends State<mainScreen> {
    super.initState();
    if(loaded==false) {
      myProduct().getInfo();
-//     myProduct().getProductCategory();
-
      // calling product list here as it was not loading when loaded in my product in the first time
      setState(() {
        loaded = true;

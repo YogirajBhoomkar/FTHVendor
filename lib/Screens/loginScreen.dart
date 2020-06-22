@@ -153,13 +153,12 @@ static var hashed;
         'password': PHPpassword,
       };
       //print(data);
-      print(json.encode(data));
+     // print(json.encode(data));
       var response =
       await http.post(url, body: json.encode(data));
       var message = jsonDecode(response.body);
-      print(message);
       if (message == 'Login Matched') {
-
+        getVendorId(PHPregistration,PHPpassword);
         loginPrefs.setBool('isLogged', true);
         print(loginPrefs.getBool('isLogged'));
         Navigator.pushNamed(context, mainScreen.id);
@@ -169,4 +168,20 @@ static var hashed;
       }
 
   }
+  Future getVendorId (String phPregistration, String phPpassword) async {
+    url = 'https://dev.farmtohome.online/flutter_test/getVendorId.php';
+    SharedPreferences loginPrefs = await SharedPreferences.getInstance();
+    var data = {
+      'reg_id': PHPregistration,
+      'password': PHPpassword,
+    };
+    print(json.encode(data));
+    var response =
+    await http.post(url, body: json.encode(data));
+    var message = jsonDecode(response.body);
+    loginPrefs.setString('vendorId', message);
+    
+  }
 }
+
+

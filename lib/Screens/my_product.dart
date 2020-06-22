@@ -28,6 +28,8 @@ class myProduct extends StatefulWidget {
   var getCategoryJson;
   int CategoryId;
   String CategoryName;
+  int index;
+  static bool selectedFlag=false;
 
   @override
   _myProductState createState() => _myProductState();
@@ -76,8 +78,8 @@ class myProduct extends StatefulWidget {
         category1 = "Category Unknown";
       }
       ProductCard.add(
-        Task(myProduct.productUrl, myProduct.productName, category1,
-            myProduct.productId),
+        Task(i,myProduct.productUrl, myProduct.productName, category1,
+            myProduct.productId,myProduct.selectedFlag),
       );
     }
   }
@@ -146,16 +148,17 @@ class _myProductState extends State<myProduct> {
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
                     return index < ProductCard.length
-                        ? productCard(
+                        ? productCard(ProductCard[index].index,
                             ProductCard[index].productUrl,
                             ProductCard[index].productName,
                             ProductCard[index].categoryName,
-                            ProductCard[index].productId)
+                            ProductCard[index].productId,ProductCard[index].selectedFlag)
                         : productCard(
+                            null,
                             "https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg",
                             "End OF List",
                             "",
-                            null);
+                            null,false);
                   },
                   itemCount: ProductCard.length + 7,
                 ),
