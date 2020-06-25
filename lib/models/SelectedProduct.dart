@@ -1,10 +1,14 @@
 class SelectedProduct{
+   String productUrl;
    String productName;
-   String productId;
+   int productId;
+   String categoryName;
    double price;
    String stock;
-  SelectedProduct(String productName,String productId,){
+  SelectedProduct(String productUrl, String productName,String  CategoryName,int productId){
+    this.productUrl=productUrl;
     this.productName=productName;
+    this.categoryName=categoryName;
     this.productId=productId;
   }
 }

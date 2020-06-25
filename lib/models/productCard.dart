@@ -3,15 +3,18 @@ import 'dart:collection';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fthvendor/Screens/addStock.dart';
 import 'package:fthvendor/Screens/my_product.dart';
 import 'package:fthvendor/models/SelectedProduct.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class productCard extends StatefulWidget {
   String productUrl="https://cdn4.iconfinder.com/data/icons/ui-beast-4/32/Ui-12-512.png";
   String productName="Product Name";
   String categoryName="Product Category";
   int productId;
-   int index;
+  int index;
   static bool selectedProductFlag;
+ static HashMap SelectedProductsMap = new HashMap<int, SelectedProduct>();
    productCard(Index,productUrl,productName,categoryName,productId,selectedFlag){
     index=Index;
     this.productUrl=productUrl;
@@ -27,10 +30,17 @@ class productCard extends StatefulWidget {
 }
 
 class _productCardState extends State<productCard> {
-  HashMap SelectedProductsMap = new HashMap<int, SelectedProduct>();
 
+
+  bool result=false;
+  void initState(){
+    super.initState();
+
+  }
 
   Widget build(BuildContext context) {
+    initial(widget.index);
+
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),
       height: 150.h,
@@ -76,8 +86,8 @@ class _productCardState extends State<productCard> {
                     ),
                     height: ScreenUtil().setHeight(40),
                     width:ScreenUtil().setHeight(160) ,
-                    child:   ProductCard[widget.index].selectedFlag==false?FlatButton(
-                      onPressed: ()=>onPress(widget.index,widget.productId,widget.productName),
+                    child:   result==false?FlatButton(
+                      onPressed: ()=>onPress(widget.index,widget.productId,widget.productName,widget.productUrl,widget.categoryName),
                       child: Text(
                         "Add Product",
                         style: TextStyle(
@@ -91,12 +101,16 @@ class _productCardState extends State<productCard> {
                           color: Colors.white,
                           fontSize: ScreenUtil().setSp(15),),
                       ),
-                      onPressed: (){setState(() {
+                      onPressed: ()async{
+                        SharedPreferences productPresfs = await SharedPreferences.getInstance();
                         setState(() {
+                          productPresfs.setBool('productCard[${widget.index}]',false);
                           ProductCard[widget.index].selectedFlag=false;
+                          productCard.SelectedProductsMap.remove(widget.productId);
+                          result=false;
                         });
 
-                      });},
+                     },
                     ),),
                 ],
               ),
@@ -108,12 +122,50 @@ class _productCardState extends State<productCard> {
     );
   }
 
-  onPress(int index,int productId,String productName) {
-    print(productId);
-    SelectedProduct selectedProduct = SelectedProduct(productId.toString(),productName);
-    SelectedProductsMap[widget.productId]=selectedProduct;
+  onPress(int index,int productId,String productName,String productUrl,String categoryName)async {
+    SharedPreferences productPresfs = await SharedPreferences.getInstance();
+    SelectedProduct selectedProduct = SelectedProduct(productUrl,productName,categoryName,productId);
+    if(productCard.SelectedProductsMap[widget.productId]==null){
+      productCard.SelectedProductsMap[widget.productId]=selectedProduct;
+    }
+
     setState(() {
+      productPresfs.setBool('productCard[$index]', true);
       ProductCard[index].selectedFlag=true;
+      result=true;
+      print(index);
     });
+
+    checkIfAlreadySelected(index);
+
   }
+//    bool getBool(int index){
+//      bool finalResult = checkIfAlreadySelected(index);
+//      return finalResult;
+//    }
+    checkIfAlreadySelected(int index) async{
+    SharedPreferences productPresfs = await SharedPreferences.getInstance();
+     setState(() {
+       result=productPresfs.getBool('productCard[$index]');
+     });
+    print("Hello $result $index");
+  }
+
+  void initial(int index)async {
+    SharedPreferences productPresfs = await SharedPreferences.getInstance();
+    if(productPresfs.getBool('productCard[$index]')!=true) {
+      productPresfs.setBool('productCard[$index]', false);
+      setState(() {
+        result = false;
+      });
+
+    }
+    else {
+      setState(() {
+        result = true;
+      });
+    }
+   // checkIfAlreadySelected(widget.index);
+  }
+
 }

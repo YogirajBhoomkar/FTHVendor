@@ -17,7 +17,7 @@ class myProduct extends StatefulWidget {
   static String productCategory = "";
   static int productId = 1;
   static var Producturl = "";
-  static bool loaded = false;
+  static bool load= false;
   static String getProductCounturl;
   String getCategoryCountUrl;
   var getCategoryCountResponse;
@@ -36,7 +36,7 @@ class myProduct extends StatefulWidget {
 
 // Lists
 
-  HashMap ProductCategoryMap = new HashMap<int, String>();
+ static HashMap ProductCategoryMap = new HashMap<int, String>();
 
   // Related to PHP
 
@@ -66,7 +66,6 @@ class myProduct extends StatefulWidget {
     var getCount = jsonDecode(countResponse.body);
     var response1 = await http.post(Producturl);
     var message1 = jsonDecode(response1.body);
-
     for (int i = 0; i < int.parse(getCount['COUNT(*)']); i++) {
       myProduct.productId = int.parse(message1[i]['prod_id']);
       myProduct.productCategory = message1[i]['cat_id'];
@@ -94,8 +93,6 @@ class _myProductState extends State<myProduct> {
   static var formatter = new DateFormat('yyyy-MM-dd');
   String formattedDate = formatter.format(now);
 
-  String getNameForCategory(String catId) {
-  }
 
   Widget build(BuildContext context) {
     double defaultScreenWidth = 414.0;
@@ -140,6 +137,7 @@ class _myProductState extends State<myProduct> {
                 color: Color(0xFF8036FF),
               ),
             ),
+
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 5),
               child: Container(
@@ -159,8 +157,9 @@ class _myProductState extends State<myProduct> {
                             "End OF List",
                             "",
                             null,false);
+
                   },
-                  itemCount: ProductCard.length + 7,
+                  itemCount: ProductCard.length+7,
                 ),
               ),
             ),

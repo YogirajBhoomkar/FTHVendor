@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fthvendor/Screens/addStock.dart';
 import 'package:fthvendor/Screens/my_product.dart';
 import 'package:http/http.dart' as http;
 class mainScreen extends StatefulWidget {
@@ -129,7 +130,9 @@ class _mainScreenState extends State<mainScreen> {
                         fontFamily: "Roboto",
                         fontWeight: FontWeight.w400),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, addStock.id);
+                  },
                 ),
                 ListTile(
                   leading: Icon(

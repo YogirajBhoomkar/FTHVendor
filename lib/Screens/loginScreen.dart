@@ -10,13 +10,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 class loginScreen extends StatefulWidget {
   @override
   static String id = "loginScreen";
-
+  static String PHPregistration = "";
   @override
   _loginScreenState createState() => _loginScreenState();
 }
 
 class _loginScreenState extends State<loginScreen> {
-  static String PHPregistration = "";
+
   static String PHPpassword = "";
   var url = "";
 static var hashed;
@@ -80,7 +80,10 @@ static var hashed;
                   height: 70.h,
                   child: TextField(
                     onChanged: (value) {
-                      PHPregistration=value;
+
+                        loginScreen.PHPregistration=value;
+
+
                     },
                     textAlign: TextAlign.start,
                     keyboardType: TextInputType.emailAddress,
@@ -149,7 +152,7 @@ static var hashed;
     url = 'https://dev.farmtohome.online/flutter_test/login.php';
     SharedPreferences loginPrefs = await SharedPreferences.getInstance();
       var data = {
-        'reg_id': PHPregistration,
+        'reg_id': loginScreen.PHPregistration,
         'password': PHPpassword,
       };
       //print(data);
@@ -158,9 +161,12 @@ static var hashed;
       await http.post(url, body: json.encode(data));
       var message = jsonDecode(response.body);
       if (message == 'Login Matched') {
-        getVendorId(PHPregistration,PHPpassword);
+        loginPrefs.setString('regID', loginScreen.PHPregistration);
+        loginPrefs.setString('pwd', PHPpassword);
+        getVendorId(loginScreen.PHPregistration,PHPpassword);
         loginPrefs.setBool('isLogged', true);
         print(loginPrefs.getBool('isLogged'));
+        loginPrefs.setString('regId', loginScreen.PHPregistration);
         Navigator.pushNamed(context, mainScreen.id);
       } else {
         loginPrefs.setBool('isLogged', false);
@@ -172,7 +178,7 @@ static var hashed;
     url = 'https://dev.farmtohome.online/flutter_test/getVendorId.php';
     SharedPreferences loginPrefs = await SharedPreferences.getInstance();
     var data = {
-      'reg_id': PHPregistration,
+      'reg_id': loginScreen.PHPregistration,
       'password': PHPpassword,
     };
     print(json.encode(data));
